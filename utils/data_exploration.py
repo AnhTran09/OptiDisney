@@ -26,6 +26,7 @@ def date_to_integer(date):
 def average_wait_time(df):
     df = df.dropna(subset = ['SPOSTMIN'])
     df = df[df['SPOSTMIN'] != -999]
+
     df['datetime'] = pd.to_datetime(df['datetime'])
     df['hour'] = df['datetime'].dt.hour
     df['month'] = df['datetime'].dt.month
