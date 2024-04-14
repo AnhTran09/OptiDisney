@@ -20,6 +20,7 @@ toy_story = pd.read_csv("./dataset/toy_story_mania.csv")
 def average_wait_time(df):
     df = df.dropna(subset = ['SPOSTMIN'])
     df = df[df['SPOSTMIN'] != -999]
+
     df['datetime'] = pd.to_datetime(df['datetime'])
     df['hour'] = df['datetime'].dt.hour
     
