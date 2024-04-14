@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import date
+from datetime import datetime
 pd.options.mode.chained_assignment = None
 
 seven_dwarfs = pd.read_csv("./dataset/7_dwarfs_train.csv")
@@ -17,15 +17,28 @@ spaceship = pd.read_csv("./dataset/spaceship_earth.csv")
 splash_mount = pd.read_csv("./dataset/splash_mountain.csv")
 toy_story = pd.read_csv("./dataset/toy_story_mania.csv")
 
+def date_to_integer(date):
+    current_date = pd.to_datetime(date)
+    start_date = datetime(2024, 1, 1)
+    delta = current_date - start_date
+    return delta.days + 1
+
 def average_wait_time(df):
     df = df.dropna(subset = ['SPOSTMIN'])
     df = df[df['SPOSTMIN'] != -999]
 
     df['datetime'] = pd.to_datetime(df['datetime'])
     df['hour'] = df['datetime'].dt.hour
+    df['month'] = df['datetime'].dt.month
+    df['day'] = df['datetime'].dt.day
     
-    result = df.groupby(['date', 'hour'])["SPOSTMIN"].mean().reset_index()
-    result.columns = ['date', 'hour', 'avg_wait_time']
+    result = df.groupby(['month','day', 'hour'])["SPOSTMIN"].mean().reset_index()
+    result['year'] = 2024
+    result['date'] = result['year'].astype(str) + '-' + result['month'].astype(str).str.zfill(2) + '-' + result['day'].astype(str).str.zfill(2)
+    result['date'] = result['date'].apply(date_to_integer)
+    result = result.drop(['year', 'month', 'day'], axis = 1)
+    result.columns = ['hour', 'avg_wait_time', 'date']
+
     return result
 
 seven_dwarfs = average_wait_time(seven_dwarfs)
