@@ -37,6 +37,7 @@ def average_wait_time(df):
     result['date'] = result['year'].astype(str) + '-' + result['month'].astype(str).str.zfill(2) + '-' + result['day'].astype(str).str.zfill(2)
     result['date'] = result['date'].apply(date_to_integer)
     result = result.drop(['year', 'month', 'day'], axis = 1)
+    result = result[(result['hour'] >= 8) & (result['hour'] <= 21)]
     result.columns = ['hour', 'avg_wait_time', 'date']
 
     return result
@@ -57,7 +58,7 @@ splash_mount = average_wait_time(splash_mount)
 toy_story = average_wait_time(toy_story)
 
 seven_dwarfs.loc[:, 'ride'] = "seven_dwarfs"
-alien_saurcers.loc[:, 'ride'] = "alien_saurcers"
+alien_saurcers.loc[:, 'ride'] = "alien_saucers"
 dinosaur.loc[:, 'ride'] = "dinosaur"
 everest.loc[:, 'ride'] = "everest"
 flight_of_passage.loc[:, 'ride'] = "flight_of_passage"
